@@ -1,0 +1,30 @@
+{
+  "name": "chat-socketio",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon index.js",
+    "start": "node index.js"
+  },
+  "author": "German Ordoñez",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "2.8.5",
+    "dotenv": "^16.0.0",
+    "express": "4.17.1",
+    "formidable": "^2.0.1",
+    "generate-password": "^1.7.0",
+    "helmet": "^5.0.2",
+    "jsonwebtoken": "^8.5.1",
+    "moment-timezone": "0.5.33",
+    "mongoose": "6.0.5",
+    "mongoose-unique-validator": "2.0.3",
+    "morgan": "^1.10.0",
+    "socket.io": "4.2.0"
+  },
+  "engines": {
+    "node": ">=16.13.1"
+  }
+}
