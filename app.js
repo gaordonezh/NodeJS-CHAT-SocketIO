@@ -11,6 +11,7 @@ const UserRoutes = require("./routes/user.routes");
 const MessageRoutes = require("./routes/message.routes");
 const RoomRoutes = require("./routes/room.routes");
 const { getUsers } = require("./socket.controllers/user.socket.controllers");
+const { createMessage } = require("./socket.controllers/message.socket.controllers");
 
 dotenv.config();
 
@@ -46,6 +47,11 @@ class Server {
       socket.on("get_users", async (userId) => {
         const allUsers = await getUsers(userId);
         this.io.to(userId).emit("users_data", allUsers);
+      });
+
+      socket.on("send_message", async (data) => {
+        const result = await createMessage(data);
+        this.io.to(data.room).emit("get_messages", result);
       });
     });
   }
