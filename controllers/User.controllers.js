@@ -1,8 +1,4 @@
 const User = require("../models/User");
+const Message = require("../models/Message");
+const moment = require("moment-timezone");
 
-exports.getAllUsers = (req, res) => {
-  User.find().exec((err, data) => {
-    if (err) return res.status(400).json(err);
-    res.status(200).json(data);
-  });
-};

@@ -8,7 +8,9 @@ const moment = require("moment-timezone");
 const morgan = require("morgan");
 const AuthRoutes = require("./routes/auth.routes");
 const UserRoutes = require("./routes/user.routes");
-const { getMessages } = require("./socket.controllers/message.socket.controllers");
+const MessageRoutes = require("./routes/message.routes");
+const RoomRoutes = require("./routes/room.routes");
+const { getUsers } = require("./socket.controllers/user.socket.controllers");
 
 dotenv.config();
 
@@ -37,13 +39,13 @@ class Server {
 
   socketControllers() {
     this.io.on("connection", (socket) => {
-      socket.on("register", ({ roomTest }) => {
-        socket.join(roomTest);
+      socket.on("register", (general) => {
+        socket.join(general);
       });
 
-      socket.on("get_messages", async ({ roomId }) => {
-        const messagesByRoom = await getMessages(roomId);
-        this.io.to(roomTest).emit("messages_data", messagesByRoom);
+      socket.on("get_users", async (userId) => {
+        const allUsers = await getUsers(userId);
+        this.io.to(userId).emit("users_data", allUsers);
       });
     });
   }
@@ -69,6 +71,8 @@ class Server {
 
     this.app.use("/api/auth", AuthRoutes);
     this.app.use("/api/user", UserRoutes);
+    this.app.use("/api/message", MessageRoutes);
+    this.app.use("/api/room", RoomRoutes);
   }
 
   conectarBD() {
