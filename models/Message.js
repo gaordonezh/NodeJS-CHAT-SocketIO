@@ -2,12 +2,7 @@ const { Schema, model } = require("mongoose");
 
 const MessageSchema = new Schema(
   {
-    from: {
-      type: Schema.Types.ObjectId,
-      ref: "user",
-      required: [true, "Field is required"],
-    },
-    to: {
+    sender: {
       type: Schema.Types.ObjectId,
       ref: "user",
       required: [true, "Field is required"],

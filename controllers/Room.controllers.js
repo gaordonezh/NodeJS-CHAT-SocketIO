@@ -3,12 +3,11 @@ const Message = require("../models/Message");
 
 exports.createRoom = async (req, res) => {
   try {
-    const { name, from, to } = req.body;
-    const data = await Room({ name }).save();
+    const { name, sender, users } = req.body;
+    const data = await Room({ name, users }).save();
 
     const dataMessage = {
-      from,
-      to,
+      sender,
       room: data._id,
       content: "initial_message",
       active: false,
