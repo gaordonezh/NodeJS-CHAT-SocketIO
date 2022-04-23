@@ -2,11 +2,10 @@ const Message = require("../models/Message");
 
 exports.getMessages = async (req, res) => {
   try {
-    const { room } = req.body;
+    const { room } = req.params;
     const data = await Message.find({ room });
-    console.log(data,"-----");
-    res.status(200).json(data);
+    res.status(201).json(data);
   } catch (error) {
-    res.status(400).json({ err: "error" });
+    res.status(400).json({ error });
   }
 };

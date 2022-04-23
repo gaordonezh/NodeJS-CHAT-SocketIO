@@ -7,9 +7,7 @@ const mongoose = require("mongoose");
 const moment = require("moment-timezone");
 const morgan = require("morgan");
 const AuthRoutes = require("./routes/auth.routes");
-const UserRoutes = require("./routes/user.routes");
 const MessageRoutes = require("./routes/message.routes");
-const RoomRoutes = require("./routes/room.routes");
 const { getUsers } = require("./socket.controllers/user.socket.controllers");
 const { createMessage } = require("./socket.controllers/message.socket.controllers");
 
@@ -40,18 +38,18 @@ class Server {
 
   socketControllers() {
     this.io.on("connection", (socket) => {
-      socket.on("register", (general) => {
-        socket.join(general);
+      socket.on("register", (key) => {
+        socket.join(key);
       });
 
-      socket.on("get_users", async (userId) => {
-        const allUsers = await getUsers(userId);
-        this.io.to(userId).emit("users_data", allUsers);
+      socket.on("socket_user", async (globalKEY) => {
+        const allUsers = await getUsers();
+        this.io.to(globalKEY).emit("socket_user_data", allUsers);
       });
 
-      socket.on("send_message", async (data) => {
-        const result = await createMessage(data);
-        this.io.to(data.room).emit("get_messages", result);
+      socket.on("create_message", async (info) => {
+        const result = await createMessage(info);
+        this.io.to(info.room).emit("get_messages", result);
       });
     });
   }
@@ -76,9 +74,7 @@ class Server {
     });
 
     this.app.use("/api/auth", AuthRoutes);
-    this.app.use("/api/user", UserRoutes);
     this.app.use("/api/message", MessageRoutes);
-    this.app.use("/api/room", RoomRoutes);
   }
 
   conectarBD() {
