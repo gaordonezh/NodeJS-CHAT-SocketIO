@@ -28,18 +28,20 @@ const UserSchema = new Schema(
     profile_picture: {
       type: String,
     },
-    rol: {
-      type: String,
+    room: {
+      type: Schema.Types.ObjectId,
+      ref: "room",
+      required: [true, "field is required"],
+    },
+    active: {
+      type: Boolean,
+      default: true,
     },
     reset_password_token: {
       type: String,
     },
     reset_password_expires: {
       type: Date,
-    },
-    active: {
-      type: Boolean,
-      default: true,
     },
   },
   {

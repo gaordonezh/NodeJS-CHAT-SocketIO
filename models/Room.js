@@ -7,12 +7,6 @@ const RoomSchema = new Schema(
       type: String,
       required: [true, "Field is required"],
     },
-    users: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "user",
-      },
-    ],
     active: {
       type: Boolean,
       default: true,

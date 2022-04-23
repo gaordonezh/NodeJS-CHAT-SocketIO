@@ -1,26 +1,34 @@
-const jwt = require("jsonwebtoken");
 const User = require("../models/User");
+const Room = require("../models/Room");
+const jwt = require("jsonwebtoken");
 
 exports.signUp = async (req, res) => {
   try {
-    let objUser = {
+    const objRoom = { name: `SALA DE ${req.body.f_name.toUpperCase()}` };
+
+    const createRoom = new Room(objRoom);
+    const newRoom = await createRoom.save();
+
+    const objUser = {
       ...req.body,
       password: await User.encryptPassword(req.body.password),
+      username: req.body.email,
+      room: newRoom._id,
     };
 
-    const newUser = new User(objUser);
-    const result = await newUser.save();
+    const createUser = new User(objUser);
+    const newUser = await createUser.save();
 
-    const token = jwt.sign({ id: result._id }, process.env.SECRET_KEY_JWT, {
+    const token = jwt.sign({ id: newUser._id }, process.env.SECRET_KEY_JWT, {
       expiresIn: process.env.TOKEN_EXPIRATION_IN,
     });
 
     res.status(200).json({
-      data: result.toJSON(),
+      data: newUser.toJSON(),
       token,
     });
   } catch (error) {
-    res.status(400).json({ error });
+    res.status(400).json(error);
   }
 };
 
